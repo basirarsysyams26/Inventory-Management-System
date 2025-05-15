@@ -3,9 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Surat Hasil Pengujian Alat Produksi</title>
+    <title>IMS - Surat Hasil Pengujian Alat Produksi</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="icon" href="{{ asset('favicon.png') }}" type="image/png">
 
   </head>
   <body class="bg-white text-black p-10 font-serif">
