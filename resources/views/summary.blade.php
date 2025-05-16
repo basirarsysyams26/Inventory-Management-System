@@ -135,6 +135,9 @@
           </select>
           <button id="filterBtn" class="bg-blue-500 text-white px-3 py-1 rounded">Filter</button>
           <button id="exportBtn" class="bg-green-500 text-white px-3 py-1 rounded ml-4"><i class="fas fa-download"></i> Export PNG</button>
+          <button id="exportExcelBtn" class="bg-green-500 text-white px-3 py-1 rounded ml-4">
+            <i class="fas fa-file-excel"></i> Export Excel
+           </button>
         </div>
 
         <!-- Chart Container -->
@@ -248,6 +251,33 @@
         menu.classList.toggle("hidden");
         icon.classList.toggle("rotate-180"); // rotasi panah saat dropdown terbuka
       }
+
+      // Event listener for export Excel button
+      document.getElementById('exportExcelBtn').addEventListener('click', function() {
+      const tahun = document.getElementById('tahunSelect').value;
+      const bulan = document.getElementById('bulanSelect').value;
+      const url = `/summary/export?tahun=${tahun}&bulan=${bulan}`;
+      fetch(url, {
+        method: 'GET',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        }
+      })
+      .then(response => {
+        if (!response.ok) throw new Error('Gagal export Excel');
+        return response.blob();
+      })
+      .then(blob => {
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = 'summary_export.xlsx';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      })
+      .catch(err => alert(err.message));
+    });
     </script>
   </body>
 </html>

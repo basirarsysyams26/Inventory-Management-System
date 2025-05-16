@@ -24,34 +24,28 @@ class HasilTestController extends Controller
         $search_waktu_selesai = $request->input('search_waktu_selesai');
         // Ambil hanya history terbaru untuk setiap alat
         $sub = \App\Models\History::selectRaw('MAX(id) as id')
+            ->where('is_canceled', 0)
             ->groupBy('product_equipment_id');
-    
-
         $query = \App\Models\History::with(['productEquipment.productEquipmentType'])
             ->whereIn('id', $sub);
-           
-        
         // Filter berdasarkan nama alpro
         if ($search_nama_alpro) {
             $query->whereHas('productEquipment.productEquipmentType', function($q) use ($search_nama_alpro) {
                 $q->where('name', 'like', '%' . $search_nama_alpro . '%');
             });
         }
-// Filter berdasarkan SN
         // Filter berdasarkan SN
         if ($search_sn) {
             $query->whereHas('productEquipment', function($q) use ($search_sn) {
                 $q->where('sn', 'like', '%' . $search_sn . '%');
             });
         }
-
         // Filter berdasarkan TAGG
         if ($search_tagg) {
             $query->whereHas('productEquipment', function($q) use ($search_tagg) {
                 $q->where('tagg', 'like', '%' . $search_tagg . '%');
             });
         }
-
         // Filter berdasarkan waktu mulai
         if ($search_waktu_mulai) {
             $query->whereDate('waktu_mulai', '=', $search_waktu_mulai);

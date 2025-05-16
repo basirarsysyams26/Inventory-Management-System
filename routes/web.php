@@ -1,10 +1,12 @@
 <?php
 
+
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\SuratController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RiwayatController;
+use App\Http\Controllers\SummaryController;
 use App\Http\Controllers\ProsesQcController;
 use App\Http\Controllers\HasilTestController;
 
@@ -33,6 +35,8 @@ Route::post('/riwayat/{history}/restore', [\App\Http\Controllers\RiwayatControll
 Route::get('/summary', function () {
     return view('summary');
 })->name('summary');
+Route::get('/summary/export', [SummaryController::class, 'exportExcel'])->name('summary.export');
+
 
 
 

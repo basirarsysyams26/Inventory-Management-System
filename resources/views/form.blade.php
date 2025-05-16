@@ -113,7 +113,35 @@
                       </tr>
                   </thead>
                   <tbody>
-                      @foreach($elementTests as $index => $element)
+                      @php
+                            $elementTests = old('element_tests', $elementTests ?? []);
+                      @endphp
+                      @php
+                      $elementTests = old('element_tests', $elementTests ?? []);
+                  @endphp
+                  @foreach ($elementTests as $index => $element)
+                  <tr class="border-b">
+                      <td class="py-2 px-4">{{ $index + 1 }}</td>
+                      <td class="py-2 px-4">
+                          <input type="hidden" name="element_tests[{{ $index }}][nama_element]" value="{{ old('element_tests.' . $index . '.nama_element', $element['nama_element'] ?? $element->nama_element ?? '') }}">
+                          {{ old('element_tests.' . $index . '.nama_element', $element['nama_element'] ?? $element->nama_element ?? '') }}
+                      </td>
+                      <td class="py-2 px-4">
+                          <select name="element_tests[{{ $index }}][status]" class="border border-gray-300 p-2 rounded w-full status-select" data-ok="{{ $element['keterangan_ok'] ?? $element->keterangan_ok ?? ($element['keterangan'] ?? $element->keterangan ?? '') }}" data-notok="{{ $element['keterangan_not_ok'] ?? $element->keterangan_not_ok ?? ($element['keterangan'] ?? $element->keterangan ?? '') }}">
+                              <option value="OK" @if(old('element_tests.' . $index . '.status', $element['status'] ?? $element->status ?? 'PROGRESS') == 'OK') selected @endif>OK</option>
+                              <option value="NOT OK" @if(old('element_tests.' . $index . '.status', $element['status'] ?? $element->status ?? 'PROGRESS') == 'NOT OK') selected @endif>NOT OK</option>
+                              <option value="PROGRESS" @if(old('element_tests.' . $index . '.status', $element['status'] ?? $element->status ?? 'PROGRESS') == 'PROGRESS') selected @endif>PROGRESS</option>
+                          </select>
+                      </td>
+                      <td class="py-2 px-4">
+                          <input type="text" name="element_tests[{{ $index }}][hasil_test]" class="border border-gray-300 p-2 rounded w-full" placeholder="Masukkan Hasil Tes" value="{{ old('element_tests.' . $index . '.hasil_test', $element['hasil_test'] ?? $element->hasil_test ?? '') }}" />
+                      </td>
+                      <td class="py-2 px-4">
+                          <input type="text" name="element_tests[{{ $index }}][keterangan]" class="border border-gray-300 p-2 rounded w-full keterangan-input" value="{{ old('element_tests.' . $index . '.keterangan', $element['keterangan'] ?? $element->keterangan ?? '') }}" readonly />
+                      </td>
+                  </tr>
+                  @endforeach
+                      {{-- @foreach($elementTests as $index => $element)
                       <tr class="border-b">
                           <td class="py-2 px-4">{{ $index + 1 }}</td>
                           <td class="py-2 px-4">
@@ -134,7 +162,7 @@
                               <input type="text" name="element_tests[{{ $index }}][keterangan]" class="border border-gray-300 p-2 rounded w-full keterangan-input" value="{{ $element->keterangan ?? '' }}" readonly />
                           </td>
                       </tr>
-                      @endforeach
+                      @endforeach --}}
                   </tbody>
               </table>
           </div>
@@ -145,9 +173,9 @@
                   <input type="text" id="statusAkhir" name="status_akhir" class="w-full border border-gray-300 p-2 rounded" value="{{ $history->status_akhir ?? 'PROGRESS' }}" readonly />
               </div>
               <div>
-                  <label class="block text-gray-700">KETERANGAN AKHIR</label>
-                  <textarea name="keterangan_akhir" class="w-full border border-gray-300 p-2 rounded">{{ $history->keterangan_akhir ?? '' }}</textarea>
-              </div>
+                <label class="block text-gray-700">KETERANGAN AKHIR</label>
+                <textarea name="keterangan_akhir" class="w-full border border-gray-300 p-2 rounded">{{ old('keterangan_akhir', $history->keterangan_akhir ?? '') }}</textarea>
+            </div>
           </div>
           <div class="mb-4" id="fotoBuktiWrapper">
               <label class="block text-gray-700">Foto Bukti Hasil Pengetesan</label>
