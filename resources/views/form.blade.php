@@ -141,28 +141,6 @@
                       </td>
                   </tr>
                   @endforeach
-                      {{-- @foreach($elementTests as $index => $element)
-                      <tr class="border-b">
-                          <td class="py-2 px-4">{{ $index + 1 }}</td>
-                          <td class="py-2 px-4">
-                              <input type="hidden" name="element_tests[{{ $index }}][nama_element]" value="{{ $element->nama_element }}">
-                              {{ $element->nama_element }}
-                          </td>
-                          <td class="py-2 px-4">
-                              <select name="element_tests[{{ $index }}][status]" class="border border-gray-300 p-2 rounded w-full status-select" data-ok="{{ $element->keterangan_ok ?? ($element->keterangan ?? '') }}" data-notok="{{ $element->keterangan_not_ok ?? ($element->keterangan ?? '') }}">
-                                  <option value="OK" @if(isset($element->status) && $element->status == 'OK') selected @endif>OK</option>
-                                  <option value="NOT OK" @if(isset($element->status) && $element->status == 'NOT OK') selected @endif>NOT OK</option>
-                                  <option value="PROGRESS" @if(!isset($element->status) || $element->status == 'PROGRESS') selected @endif>PROGRESS</option>
-                              </select>
-                          </td>
-                          <td class="py-2 px-4">
-                              <input type="text" name="element_tests[{{ $index }}][hasil_test]" class="border border-gray-300 p-2 rounded w-full" placeholder="Masukkan Hasil Tes" value="{{ $element->hasil_test ?? '' }}" />
-                          </td>
-                          <td class="py-2 px-4">
-                              <input type="text" name="element_tests[{{ $index }}][keterangan]" class="border border-gray-300 p-2 rounded w-full keterangan-input" value="{{ $element->keterangan ?? '' }}" readonly />
-                          </td>
-                      </tr>
-                      @endforeach --}}
                   </tbody>
               </table>
           </div>
@@ -258,6 +236,24 @@
           fotoInput.classList.remove('border-red-500');
       }
   });
+
+    document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.status-select').forEach(function(select) {
+    // Trigger awal agar keterangan terisi sesuai status saat reload
+    select.dispatchEvent(new Event('change'));
+    select.addEventListener('change', function() {
+      const row = select.closest('tr');
+      const keteranganInput = row.querySelector('.keterangan-input');
+      if (select.value === 'OK') {
+        keteranganInput.value = select.getAttribute('data-ok') || '';
+      } else if (select.value === 'NOT OK') {
+        keteranganInput.value = select.getAttribute('data-notok') || '';
+      } else {
+        keteranganInput.value = '';
+      }
+    });
+  });
+});
         
     </script>
   </body>

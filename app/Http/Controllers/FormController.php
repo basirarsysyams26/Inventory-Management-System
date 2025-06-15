@@ -16,13 +16,6 @@ class FormController extends Controller
         $elementTests = MasterElementTest::where('product_equipment_type_id', $equipment->product_equipment_type_id)->get();
         return view('form', compact('equipment', 'elementTests'));
     }
-    // public function edit($history_id)
-    // {
-    //     $history = History::with(['productEquipment', 'elementTests'])->findOrFail($history_id);
-    //     $equipment = $history->productEquipment;
-    //     $elementTests = $history->elementTests;
-    //     return view('form', compact('equipment', 'elementTests', 'history'));
-    // }
     public function edit($history_id)
     {
         $history = History::with(['productEquipment', 'elementTests'])->findOrFail($history_id);

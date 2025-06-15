@@ -167,9 +167,15 @@
               <td class="py-2 px-4 text-center">{{ $equipment->location->nama ?? '-' }}</td>
               @if(Auth::user() && Auth::user()->role !== 'Manager')
                 <td class="py-2 px-4 text-center">
-                  <a href="{{ url('form/'. $equipment->id) }}" class="workshopBtn bg-green-500 text-white px-4 py-2 rounded">
+                  {{-- <a href="{{ url('form/'. $equipment->id) }}" class="workshopBtn bg-green-500 text-white px-4 py-2 rounded">
                     + Workshop Test
-                  </a>
+                  </a> --}}
+                  <form action="{{ route('proses-qc.workshop-test', $equipment->id) }}" method="POST" style="display:inline">
+                    @csrf
+                    <button type="submit" class="workshopBtn bg-green-500 text-white px-4 py-2 rounded">
+                        + Workshop Test
+                    </button>
+                </form>
                 </td>
               @endif
             </tr>

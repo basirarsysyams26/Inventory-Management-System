@@ -196,10 +196,10 @@
                     <td class="py-2 px-4 text-center">
                       <div class="flex space-x-1 justify-center">
                         <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-1 px-2 rounded">
-                          <i class="fas fa-search"></i> Cari
+                          <i class="fas fa-search"></i> 
                         </button>
                         <a href="{{ route('hasil-test.index') }}" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-2 rounded">
-                          <i class="fas fa-sync-alt"></i> Reset
+                          <i class="fas fa-sync-alt"></i> 
                         </a>
                       </div>
                     </td>
@@ -244,19 +244,16 @@
                          @endif
                       </td>
                       <td class="py-2 px-4 text-center">{{ $history->keterangan_akhir ?? '' }}</td>
-                      {{-- <td class="py-2 px-4 text-center">
-                        <a href="{{ route('riwayat.index', ['sn' => $history->productEquipment->sn, 'tagg' => $history->productEquipment->tagg]) }}"class="inline-flex items-center bg-blue-500 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded shadow transition duration-200">Riwayat</a>
-                      </td> --}}
-                      <td class="py-2 px-4 text-center">
+                      <td class="py-2 px-4 text-center flex justify-center gap-2">
                         <a href="{{ route('riwayat.index', ['sn' => $history->productEquipment->sn, 'tagg' => $history->productEquipment->tagg]) }}" class="inline-flex items-center bg-blue-500 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded shadow transition duration-200">Riwayat</a>
                         @auth
                           @if (
                             Auth::user()->role === 'Teknisi' &&
                             ($history->status_akhir === 'OK' || $history->status_akhir === 'NOT OK')
                           )
-                            <form action="{{ route('hasil-test.restore', $history->productEquipment->id) }}" method="POST" style="display:inline;">
+                            <form action="{{ route('hasil-test.restore', $history->productEquipment->id) }}" method="POST" style="display:inline-block;">
                               @csrf
-                              <button type="submit" onclick="return confirm('Apakah Anda yakin ingin me-restore alat ini ke Proses QC?')" class="inline-flex items-center bg-yellow-500 hover:bg-yellow-700 text-white font-semibold px-4 py-2 rounded shadow transition duration-200 ml-2">
+                              <button type="submit" onclick="return confirm('Apakah Anda yakin ingin me-restore alat ini ke Proses QC?')" class="inline-flex items-center bg-yellow-500 hover:bg-yellow-700 text-white font-semibold px-4 py-2 rounded shadow transition duration-200 ">
                                 <i class="fas fa-undo mr-1"></i> Restore
                               </button>
                             </form>

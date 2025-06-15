@@ -23,6 +23,7 @@ Route::get('/', function () {
 });
 
 Route::get('/proses-qc', [ProsesQcController::class, 'index'])->name('proses-qc.index');
+Route::post('/proses-qc/workshop-test/{equipment}', [ProsesQcController::class, 'startWorkshopTest'])->name('proses-qc.workshop-test');
 Route::get('/form/{id}', [FormController::class, 'show'])->middleware(['auth', 'role:Teknisi'])->name('form.show');
 Route::post('/hasil-test', [HasilTestController::class, 'store'])->name('hasil-test.store');
 Route::get('/hasil-test', [HasilTestController::class, 'index'])->name('hasil-test.index');
