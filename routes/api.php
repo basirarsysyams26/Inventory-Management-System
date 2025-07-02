@@ -8,3 +8,4 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 Route::get('/dashboard/summary', [SummaryController::class, 'summary'])->name('dashboard.summary');
+Route::get('/dashboard/summary/detail', [SummaryController::class, 'summaryDetail']);

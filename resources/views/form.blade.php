@@ -160,9 +160,12 @@
               <input type="file" name="images[]" id="fotoBukti" class="w-full border border-gray-300 p-2 rounded" multiple>
               <small class="text-red-500 hidden" id="fotoError">Foto bukti wajib diupload jika status akhir OK/NOT OK.</small>
           </div>
+          <div>
+            <div class="text-red-500">*Upload minimal satu images</div>
+          </div>
           <div class="flex justify-end">
               <button type="submit" id="btnSimpan" class="bg-blue-500 text-white px-4 py-2 rounded">
-                  {{ isset($history) ? 'Update' : 'Submit' }}
+                  {{ isset($history) ? 'Submit' : 'Submit' }}
               </button>
           </div>
       </form>
