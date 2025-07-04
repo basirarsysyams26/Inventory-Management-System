@@ -97,8 +97,8 @@
             @endauth
         </div>
         </div>
-      
-        
+
+
           <div class="bg-white p-6 rounded shadow mt-10 mb-5">
             <h2 class="text-xl font-semibold mb-4">Riwayat Hasil Workshop Test</h2>
             @php
@@ -109,22 +109,14 @@
               <p>SN : {{ $equipment->sn ?? '-' }}</p>
               <p>TAGG : {{ $equipment->tagg ?? '-' }}</p>
             </div>
-           
+
           @php
             $history = $histories->first();
           @endphp
-          {{-- @if($history && $history->status_akhir === 'PROGRESS' && !$history->is_canceled)
-              <form action="{{ route('riwayat.restore', $history->id) }}" method="POST" style="display:inline;">
-                  @csrf
-                  <button type="submit" class="bg-yellow-500 hover:bg-yellow-700 text-white px-3 py-1 rounded" onclick="return confirm('Yakin ingin membatalkan progress alat ini?')">
-                      Batalkan Progress
-                  </button>
-              </form>
-          @endif --}}
           @if($history && $history->status_akhir === 'PROGRESS' && !$history->is_canceled && Auth::user() && Auth::user()->role !== 'Manager')
             <form action="{{ route('riwayat.restore', $history->id) }}" method="POST" style="display:inline;">
                 @csrf
-                <button type="submit" class="bg-yellow-500 hover:bg-yellow-700 text-white px-3 py-1 rounded" onclick="return confirm('Yakin ingin membatalkan progress alat ini?')">
+                <button type="submit" class="bg-yellow-500 hover:bg-yellow-700 text-white px-3 py-1 rounded mb-4" onclick="return confirm('Yakin ingin membatalkan progress alat ini?')">
                     Batalkan Progress
                 </button>
             </form>

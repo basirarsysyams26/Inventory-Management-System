@@ -62,7 +62,7 @@ class ProsesQcController extends Controller
                 'nama_element' => $element->nama_element,
                 'hasil_test' => null,
                 'status' => 'PROGRESS',
-                'keterangan' => $element->keterangan_ok ?? '',
+                // 'keterangan' => $element->keterangan_ok ?? '',
             ]);
         }
         // 3. Update status_qc alat

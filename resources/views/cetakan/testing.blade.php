@@ -78,6 +78,19 @@
             </div>
           </div>
           <div class="bg-white p-6 rounded shadow">
+            {{-- Pesan error validasi --}}
+            @if ($errors->any())
+                <div class="mb-4">
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                        <ul class="list-disc pl-5">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            @endif
+
             <form method="POST"
             action="{{ isset($history) ? route('hasil-test.update', $history->id) : route('hasil-test.store') }}"
             enctype="multipart/form-data"
@@ -100,12 +113,12 @@
                       </tr>
                   </thead>
                   <tbody>
-                    @php
-                        $elementTests = old('element_tests', $elementTests ?? []);
-                    @endphp
-                    {{-- @php
-                        $elementTests = old('element_tests', $elementTests ?? []);
-                    @endphp --}}
+                      @php
+                            $elementTests = old('element_tests', $elementTests ?? []);
+                      @endphp
+                      @php
+                      $elementTests = old('element_tests', $elementTests ?? []);
+                  @endphp
                   @foreach ($elementTests as $index => $element)
                   <tr class="border-b">
                       <td class="py-2 px-4">{{ $index + 1 }}</td>
@@ -123,17 +136,9 @@
                       <td class="py-2 px-4">
                         <input type="text" name="element_tests[{{ $index }}][hasil_test]" class="border border-gray-300 p-2 rounded w-full" placeholder="Masukkan Hasil Tes" value="{{ old('element_tests.' . $index . '.hasil_test', $element->hasil_test ?? '') }}" />
                       </td>
-                      {{-- <td class="py-2 px-4">
-                        <input type="text" name="element_tests[{{ $index }}][keterangan]" class="border border-gray-300 p-2 rounded w-full keterangan-input" value="{{ old('element_tests.' . $index . '.keterangan', $element->keterangan ?? '') }}" readonly/>
-                      </td> --}}
-                       <td class="py-2 px-4">
-        <!-- Input readonly untuk user lihat -->
-        <input type="text" class="border border-gray-300 p-2 rounded w-full keterangan-input"
-            value="{{ old('element_tests.' . $index . '.keterangan', $element->keterangan ?? '') }}" readonly/>
-        <!-- Hidden input untuk dikirim ke server -->
-        <input type="hidden" name="element_tests[{{ $index }}][keterangan]" class="keterangan-hidden"
-            value="{{ old('element_tests.' . $index . '.keterangan', $element->keterangan ?? '') }}" />
-    </td>
+                      <td class="py-2 px-4">
+                        <input type="text" name="element_tests[{{ $index }}][keterangan]" class="border border-gray-300 p-2 rounded w-full keterangan-input" value="{{ old('element_tests.' . $index . '.keterangan', $element->keterangan ?? '') }}" readonly />
+                      </td>
                   </tr>
                   @endforeach
                   </tbody>
@@ -150,17 +155,6 @@
                 <textarea name="keterangan_akhir" class="w-full border border-gray-300 p-2 rounded">{{ old('keterangan_akhir', $history->keterangan_akhir ?? '') }}</textarea>
             </div>
           </div>
-           @if ($errors->any())
-                <div class="mb-4">
-                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-                        <ul class="list-disc pl-5">
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                </div>
-            @endif
           <div class="mb-4" id="fotoBuktiWrapper">
               <label class="block text-gray-700">Foto Bukti Hasil Pengetesan</label>
               <input type="file" name="images[]" id="fotoBukti" class="w-full border border-gray-300 p-2 rounded" multiple>
@@ -176,6 +170,7 @@
           </div>
       </form>
     <script>
+
       // Handle tool selection
       document.querySelectorAll(".toolOption").forEach((button) => {
         button.addEventListener("click", function () {
@@ -217,22 +212,18 @@
               updateStatusAkhir();
           });
       });
-
       // Set status akhir saat halaman pertama kali dimuat
       updateStatusAkhir();
+
       // Validasi Javascript sebelum submit
       document.getElementById('formPengujian').addEventListener('submit', function(e) {
-         document.querySelectorAll('.keterangan-input').forEach(function(input) {
-        let hidden = input.parentElement.querySelector('.keterangan-hidden');
-        if (hidden) hidden.value = input.value;
-        });
       let statusAkhir = document.getElementById('statusAkhir').value.toLowerCase();
       let fotoInput = document.getElementById('fotoBukti');
       let fotoError = document.getElementById('fotoError');
       let files = fotoInput.files;
 
       // Jika status akhir OK/NOT OK, foto wajib diupload
-    if (statusAkhir === 'OK' || statusAkhir === 'NOT OK') {
+      if (statusAkhir === 'OK' || statusAkhir === 'NOT OK') {
           if (!files.length) {
               e.preventDefault();
               fotoError.classList.remove('hidden');
@@ -247,53 +238,24 @@
           fotoError.classList.add('hidden');
           fotoInput.classList.remove('border-red-500');
       }
-    });
-    // document.addEventListener('DOMContentLoaded', function() {
-    //     document.querySelectorAll('.status-select').forEach(function(select) {
-    //         // Trigger awal agar keterangan terisi sesuai status saat reload
-    //         select.dispatchEvent(new Event('change'));
-    //         select.addEventListener('change', function() {
-    //         const row = select.closest('tr');
-    //         const keteranganInput = row.querySelector('.keterangan-input');
-    //         if (select.value === 'OK') {
-    //             keteranganInput.value = select.getAttribute('data-ok') || '';
-    //         } else if (select.value === 'NOT OK') {
-    //             keteranganInput.value = select.getAttribute('data-notok') || '';
-    //         } else {
-    //             keteranganInput.value = '';
-    //         }
-    //         });
-    //     });
-    // });
+  });
+
     document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.status-select').forEach(function(select) {
-        const row = select.closest('tr');
-        const keteranganInput = row.querySelector('.keterangan-input');
-        const hiddenInput = row.querySelector('.keterangan-hidden');
-        // Ambil value lama dari hidden input (hasil old() dari server)
-        if (hiddenInput && hiddenInput.value) {
-            keteranganInput.value = hiddenInput.value;
-        } else {
-            // Jika tidak ada value lama, isi sesuai status
-            if (select.value === 'OK') {
-                keteranganInput.value = select.getAttribute('data-ok') || '';
-            } else if (select.value === 'NOT OK') {
-                keteranganInput.value = select.getAttribute('data-notok') || '';
-            } else {
-                keteranganInput.value = '';
-            }
-        }
-        // Event saat status berubah tetap seperti biasa
-        select.addEventListener('change', function() {
-            if (select.value === 'OK') {
-                keteranganInput.value = select.getAttribute('data-ok') || '';
-            } else if (select.value === 'NOT OK') {
-                keteranganInput.value = select.getAttribute('data-notok') || '';
-            } else {
-                keteranganInput.value = '';
-            }
-        });
+  document.querySelectorAll('.status-select').forEach(function(select) {
+    // Trigger awal agar keterangan terisi sesuai status saat reload
+    select.dispatchEvent(new Event('change'));
+    select.addEventListener('change', function() {
+      const row = select.closest('tr');
+      const keteranganInput = row.querySelector('.keterangan-input');
+      if (select.value === 'OK') {
+        keteranganInput.value = select.getAttribute('data-ok') || '';
+      } else if (select.value === 'NOT OK') {
+        keteranganInput.value = select.getAttribute('data-notok') || '';
+      } else {
+        keteranganInput.value = '';
+      }
     });
+  });
 });
 
     </script>

@@ -33,9 +33,7 @@ Route::get('/hasil-test/{history_id}/edit', [FormController::class, 'edit'])->na
 Route::put('/hasil-test/{history_id}', [FormController::class, 'update'])->name('hasil-test.update');
 Route::post('/hasil-test/restore/{id}', [HasilTestController::class, 'restore'])->name('hasil-test.restore');
 Route::post('/riwayat/{history}/restore', [\App\Http\Controllers\RiwayatController::class, 'restore'])->name('riwayat.restore');
-Route::get('/summary', function () {
-    return view('summary');
-})->name('summary');
+Route::get('/summary', function () {return view('summary');})->name('summary');
 Route::get('/summary/export', [SummaryController::class, 'exportExcel'])->name('summary.export');
 
 

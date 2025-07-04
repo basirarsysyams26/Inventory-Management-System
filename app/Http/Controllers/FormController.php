@@ -16,6 +16,7 @@ class FormController extends Controller
         $elementTests = MasterElementTest::where('product_equipment_type_id', $equipment->product_equipment_type_id)->get();
         return view('form', compact('equipment', 'elementTests'));
     }
+
     public function edit($history_id)
     {
         $history = History::with(['productEquipment', 'elementTests'])->findOrFail($history_id);
@@ -35,7 +36,6 @@ class FormController extends Controller
                 'nama_element' => $master->nama_element,
                 'keterangan_ok' => $master->keterangan_ok,
                 'keterangan_not_ok' => $master->keterangan_not_ok,
-                // Data hasil pengujian jika ada
                 'hasil_test' => $elementTestsDb[$nama_element]->hasil_test ?? '',
                 'status' => $elementTestsDb[$nama_element]->status ?? 'PROGRESS',
                 'keterangan' => $elementTestsDb[$nama_element]->keterangan ?? '',
@@ -45,7 +45,7 @@ class FormController extends Controller
 
         return view('form', compact('equipment', 'elementTests', 'history'));
     }
-    
+
     public function update(Request $request, $history_id)
     {
         // Validasi dasar
@@ -80,10 +80,8 @@ class FormController extends Controller
                 $history->waktu_selesai = now();
             }
             $history->save();
-
             // Ambil semua element_tests lama berdasarkan history_id
             $elementTestsDb = ElementTest::where('history_id', $history_id)->get()->keyBy('nama_element');
-
             foreach ($request->element_tests as $et) {
                 // Jika element test sudah ada, update
                 if ($elementTestsDb->has($et['nama_element'])) {
@@ -122,4 +120,5 @@ class FormController extends Controller
             return back()->withErrors(['msg' => 'Gagal mengupdate data: ' . $e->getMessage()]);
         }
     }
+
 }
