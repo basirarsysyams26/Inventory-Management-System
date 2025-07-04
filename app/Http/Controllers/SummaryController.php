@@ -22,17 +22,21 @@ class SummaryController extends Controller
         if($tahun)
         {
             $histories->whereYear('waktu_mulai', $tahun);
-        }
+        };
         if($bulan)
         {
             $histories->whereMonth('waktu_selesai', $bulan);
-        }
-        // ->when($tahun, fn($q) => $q->whereYear('waktu_selesai', $tahun))
+        };
+        // ->when($tahun, fn($q) => $q->whereYear('waktu_mulai', $tahun))
         // ->when($bulan, fn($q) => $q->whereMonth('waktu_selesai', $bulan));
 
         $okCount = (clone $histories)->where('status_akhir', 'OK')->count();
         $notOkCount = (clone $histories)->where('status_akhir', 'NOT OK')->count();
-        $progressCount = (clone $histories)->where('status_akhir', 'PROGRESS')->where('is_canceled', 0)->count();
+        // $progressCount = (clone $histories)->where('status_akhir', 'PROGRESS')->where('is_canceled', 0)->count();
+        $progressQuery = History::query()->where('status_akhir', 'PROGRESS')->where('is_canceled', 0);
+        if($tahun) $progressQuery->whereYear('waktu_mulai', $tahun);
+        if($bulan) $progressQuery->whereMonth('waktu_mulai', $bulan);
+        $progressCount = $progressQuery->count();
         return response()->json([
             'total' => $totalAlat,
             'proses_qc'=> $prosesQcCount,
@@ -120,8 +124,15 @@ class SummaryController extends Controller
                 ->where('status_akhir', $status)
                 ->where('is_canceled', 0);
 
-            if ($tahun) $query->whereYear('waktu_selesai', $tahun);
-            if ($bulan) $query->whereMonth('waktu_selesai', $bulan);
+            // if ($tahun) $query->whereYear('waktu_selesai', $tahun);
+            // if ($bulan) $query->whereMonth('waktu_selesai', $bulan);
+                if (strtoupper($status) === 'PROGRESS') {
+                if ($tahun) $query->whereYear('waktu_mulai', $tahun);
+                if ($bulan) $query->whereMonth('waktu_mulai', $bulan);
+                } else {
+                if ($tahun) $query->whereYear('waktu_selesai', $tahun);
+                if ($bulan) $query->whereMonth('waktu_selesai', $bulan);
+                }
 
             // Group by alat, count history per alat
             $data = $query
